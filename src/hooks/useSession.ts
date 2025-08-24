@@ -121,40 +121,37 @@ export const useSession = () => {
       const response = await webhookService.sendWithRetry(payload);
       
       if (response.ok) {
-        let nextQuestion: Question;
-        let nextStep = currentStep;
-        let progress = state.progress;
-        let isFinished = false;
-        let summary = null;
-
+        // Check if session is finished
         if (response.end || currentStep >= baseQuestions.length) {
-          // Finished
-          isFinished = true;
-          progress = 100;
-          summary = response.summary || null;
-          nextQuestion = currentQuestion; // Keep current question
-        } else {
-          // Get next question from webhook response
-          nextStep = currentStep + 1;
-          progress = Math.round((nextStep / baseQuestions.length) * 100);
-          
-          if (response.nextQuestion) {
-            // Use question directly from webhook (AI-generated and personalized)
-            nextQuestion = {
-              id: response.nextQuestion.id || `q${nextStep.toString().padStart(2, '0')}`,
-              text: response.nextQuestion.text, // Use AI-generated text directly
-              input: response.nextQuestion.input || { type: 'text', required: true },
-              placeholders: response.nextQuestion.placeholders || {}
+          setState(prev => {
+            const newState = {
+              ...prev,
+              context: newContext,
+              isLoading: false,
+              isFinished: true,
+              progress: 100,
+              summary: response.summary || null
             };
-          } else {
-            // Fallback to local question with placeholders only if webhook doesn't provide one
-            const localQuestion = baseQuestions[nextStep - 1] || baseQuestions[baseQuestions.length - 1];
-            nextQuestion = {
-              ...localQuestion,
-              text: replacePlaceholders(localQuestion.text, newContext)
-            };
-          }
+            StorageService.saveSession(newState);
+            return newState;
+          });
+          return;
         }
+
+        // Wait for next_question from webhook response
+        if (!response.next_question) {
+          throw new Error('No se recibió la siguiente pregunta del servidor');
+        }
+
+        // Use AI-generated question from webhook
+        const nextStep = currentStep + 1;
+        const progress = Math.round((nextStep / baseQuestions.length) * 100);
+        const nextQuestion: Question = {
+          id: response.next_question.id || `q${nextStep.toString().padStart(2, '0')}`,
+          text: response.next_question.text,
+          input: response.next_question.input || { type: 'text', required: true },
+          placeholders: response.next_question.placeholders || {}
+        };
 
         setState(prev => {
           const newState = {
@@ -164,8 +161,7 @@ export const useSession = () => {
             currentQuestion: nextQuestion,
             progress: Math.max(progress, response.progress || progress),
             isLoading: false,
-            isFinished,
-            summary
+            isFinished: false
           };
           StorageService.saveSession(newState);
           return newState;

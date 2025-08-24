@@ -39,7 +39,7 @@ export interface WebhookPayload {
 
 export interface WebhookResponse {
   ok: boolean;
-  nextQuestion?: Question;
+  next_question?: Question;
   progress?: number;
   end?: boolean;
   summary?: string | null;
