@@ -38,8 +38,8 @@ export interface WebhookPayload {
 }
 
 export interface WebhookResponse {
-  ok: boolean;
-  next_question?: Question;
+  ok?: boolean;
+  next_question?: Question | string;
   progress?: number;
   end?: boolean;
   summary?: string | null;

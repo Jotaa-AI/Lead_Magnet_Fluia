@@ -1,7 +1,7 @@
 import { WebhookPayload, WebhookResponse } from '../types';
 
 const WEBHOOK_URL = 'https://personal-n8n.brtnrr.easypanel.host/webhook-test/LeadMagnet';
-const TIMEOUT = 6000; // 6 seconds
+const TIMEOUT = 15000; // 15 seconds - increased for AI processing time
 
 export class WebhookService {
   private static instance: WebhookService;

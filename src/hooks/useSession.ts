@@ -118,9 +118,19 @@ export const useSession = () => {
       };
 
       // Send to webhook
-      const response = await webhookService.sendWithRetry(payload);
+      const rawResponse = await webhookService.sendWithRetry(payload);
       
-      if (response.ok) {
+      // Handle array response from n8n webhook
+      let response: WebhookResponse;
+      if (Array.isArray(rawResponse) && rawResponse.length > 0) {
+        response = rawResponse[0];
+      } else {
+        response = rawResponse as WebhookResponse;
+      }
+      
+      console.log('Processed webhook response:', response);
+      
+      if (response.ok !== false) { // Consider undefined as success
         // Check if session is finished
         if (response.end || currentStep >= baseQuestions.length) {
           setState(prev => {
@@ -140,18 +150,34 @@ export const useSession = () => {
 
         // Wait for next_question from webhook response
         if (!response.next_question) {
-          throw new Error('No se recibió la siguiente pregunta del servidor');
+          console.error('No next_question in response:', response);
+          throw new Error('No se recibió la siguiente pregunta del servidor. Respuesta: ' + JSON.stringify(response));
         }
 
-        // Use AI-generated question from webhook
+        // Use AI-generated question from webhook - handle both string and object formats
         const nextStep = currentStep + 1;
         const progress = Math.round((nextStep / baseQuestions.length) * 100);
-        const nextQuestion: Question = {
-          id: response.next_question.id || `q${nextStep.toString().padStart(2, '0')}`,
-          text: response.next_question.text,
-          input: response.next_question.input || { type: 'text', required: true },
-          placeholders: response.next_question.placeholders || {}
-        };
+        
+        let nextQuestion: Question;
+        if (typeof response.next_question === 'string') {
+          // If next_question is just a string, create a question object
+          nextQuestion = {
+            id: `q${nextStep.toString().padStart(2, '0')}`,
+            text: response.next_question,
+            input: { type: 'text', required: true },
+            placeholders: {}
+          };
+        } else {
+          // If next_question is an object, use it directly
+          nextQuestion = {
+            id: response.next_question.id || `q${nextStep.toString().padStart(2, '0')}`,
+            text: response.next_question.text || response.next_question,
+            input: response.next_question.input || { type: 'text', required: true },
+            placeholders: response.next_question.placeholders || {}
+          };
+        }
+        
+        console.log('Next question created:', nextQuestion);
 
         setState(prev => {
           const newState = {
