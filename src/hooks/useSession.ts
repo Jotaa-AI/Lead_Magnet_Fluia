@@ -24,15 +24,6 @@ export const useSession = () => {
   const [state, setState] = useState<SessionState>(initialState);
   const webhookService = WebhookService.getInstance();
 
-  // Helper function to get context key for storing answers
-  const getContextKey = useCallback((questionId: string): string => {
-    // For the first question (company name), use 'empresa_actividad' to align with App.tsx
-    if (questionId === 'q01') {
-      return 'empresa_actividad';
-    }
-    // For other questions, use the question ID as the context key
-    return questionId;
-  }, []);
 
   // Initialize session
   const initializeSession = useCallback(() => {
@@ -101,11 +92,10 @@ export const useSession = () => {
 
     setState(prev => ({ ...prev, isLoading: true, error: null }));
 
-    // Update context
-    const contextKey = getContextKey(currentQuestion.id);
+    // Update context - use question ID directly as the variable name
     const newContext = {
       ...state.context,
-      [contextKey]: sanitizedAnswer
+      [currentQuestion.id]: sanitizedAnswer
     };
 
     try {
