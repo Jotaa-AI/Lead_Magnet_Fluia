@@ -25,15 +25,12 @@ export const PrivacyScreen: React.FC<PrivacyScreenProps> = ({ onAccept, onStart 
       <div className="max-w-2xl w-full">
         {/* Header */}
         <div className="text-center mb-8">
-          <div className="flex items-center justify-center mb-6">
+          <div className="mb-6">
             <img 
-              src="/fluialogo.png" 
+              src="/fluialogo_grande.png" 
               alt="Fluia" 
-              className="w-40 h-40 mr-3"
+              className="w-32 h-32 mx-auto"
             />
-            <h1 className="text-3xl md:text-4xl font-bold text-white">
-              
-            </h1>
           </div>
         </div>
 

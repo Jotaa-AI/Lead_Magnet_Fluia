@@ -3,7 +3,7 @@ import { Question } from '../types';
 export const baseQuestions: Question[] = [
   {
     id: 'q01',
-    text: '¡Hola! Encantado de ayudarte 😊 Para empezar, ¿cómo se llama tu empresa y a qué os dedicáis? Así puedo entender mejor cómo aplicar IA específicamente en tu caso.',
+    text: '¡Hola! Encantado de ayudarte 😊\n\nPara crear un plan de automatización que realmente marque la diferencia en tu negocio, necesito conocerte mejor.\n\n¿Cómo se llama tu empresa y a qué os dedicáis exactamente?',
     input: {
       type: 'textarea',
       placeholder: 'Ej: Somos "TechCorp" y nos dedicamos al desarrollo de software...',
