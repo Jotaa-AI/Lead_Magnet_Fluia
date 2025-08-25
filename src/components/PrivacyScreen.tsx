@@ -29,10 +29,11 @@ export const PrivacyScreen: React.FC<PrivacyScreenProps> = ({ onAccept, onStart 
             <img 
               src="/fluialogo.png" 
               alt="Fluia" 
-              className="w-12 h-12 mr-3"
+              className="w-40 h-40 mr-3"
             />
             <h1 className="text-3xl md:text-4xl font-bold text-white">
-                          </h1>
+              
+            </h1>
           </div>
         </div>
 
