@@ -32,8 +32,7 @@ export const PrivacyScreen: React.FC<PrivacyScreenProps> = ({ onAccept, onStart 
               className="w-12 h-12 mr-3"
             />
             <h1 className="text-3xl md:text-4xl font-bold text-white">
-              Fluia
-            </h1>
+                          </h1>
           </div>
         </div>
 
