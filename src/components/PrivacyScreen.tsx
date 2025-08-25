@@ -26,14 +26,15 @@ export const PrivacyScreen: React.FC<PrivacyScreenProps> = ({ onAccept, onStart 
         {/* Header */}
         <div className="text-center mb-8">
           <div className="flex items-center justify-center mb-6">
-            <Shield className="w-12 h-12 text-purple-400 mr-3" />
+            <img 
+              src="/fluialogo.png" 
+              alt="Fluia" 
+              className="w-12 h-12 mr-3"
+            />
             <h1 className="text-3xl md:text-4xl font-bold text-white">
               Fluia
             </h1>
           </div>
-          <p className="text-purple-200 text-lg">
-            Lead Magnet Conversacional
-          </p>
         </div>
 
         {/* Main Card */}
