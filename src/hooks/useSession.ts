@@ -120,7 +120,6 @@ export const useSession = () => {
         context: newContext,
         timestamp: new Date().toISOString(),
         userAgent: navigator.userAgent,
-        ...(currentStep === baseQuestions.length ? { action: 'finish' } : {})
       };
 
       // Send to webhook
