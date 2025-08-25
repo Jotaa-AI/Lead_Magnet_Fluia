@@ -73,18 +73,18 @@ export const useSession = () => {
   // Submit answer
   const submitAnswer = useCallback(async (answer: any) => {
     const currentStep = state.step;
-    const currentQuestion = state.currentQuestion;
+    const currentQuestionId = `q${currentStep.toString().padStart(2, '0')}`;
     
     // Validate answer
-    const sanitizedAnswer = sanitizeInput(answer, currentQuestion.input.type);
+    const sanitizedAnswer = sanitizeInput(answer, state.currentQuestion.input.type);
     
-    if (currentQuestion.input.required) {
-      if (!validateRequired(sanitizedAnswer, currentQuestion.input.type)) {
+    if (state.currentQuestion.input.required) {
+      if (!validateRequired(sanitizedAnswer, state.currentQuestion.input.type)) {
         setState(prev => ({ ...prev, error: 'Este campo es obligatorio' }));
         return;
       }
       
-      if (currentQuestion.input.type === 'email' && !validateEmail(sanitizedAnswer)) {
+      if (state.currentQuestion.input.type === 'email' && !validateEmail(sanitizedAnswer)) {
         setState(prev => ({ ...prev, error: 'Por favor, introduce un email válido' }));
         return;
       }
@@ -95,7 +95,7 @@ export const useSession = () => {
     // Update context - use question ID directly as the variable name
     const newContext = {
       ...state.context,
-      [currentQuestion.id]: sanitizedAnswer
+      [currentQuestionId]: sanitizedAnswer
     };
 
     try {
@@ -104,8 +104,8 @@ export const useSession = () => {
         source: 'lead-magnet-fluia',
         sessionId: state.sessionId,
         step: currentStep,
-        questionId: currentQuestion.id,
-        questionText: currentQuestion.text,
+        questionId: currentQuestionId,
+        questionText: state.currentQuestion.text,
         answer: sanitizedAnswer,
         context: newContext,
         timestamp: new Date().toISOString(),
@@ -157,7 +157,7 @@ export const useSession = () => {
         if (typeof response.next_question === 'string') {
           // If next_question is just a string, create a question object
           nextQuestion = {
-            id: `q${nextStep.toString().padStart(2, '0')}`,
+            id: currentQuestionId,
             text: response.next_question,
             input: { type: 'text', required: true },
             placeholders: {}
@@ -165,7 +165,7 @@ export const useSession = () => {
         } else {
           // If next_question is an object, use it directly
           nextQuestion = {
-            id: response.next_question.id || `q${nextStep.toString().padStart(2, '0')}`,
+            id: currentQuestionId,
             text: response.next_question.text || response.next_question,
             input: response.next_question.input || { type: 'text', required: true },
             placeholders: response.next_question.placeholders || {}
@@ -182,7 +182,8 @@ export const useSession = () => {
             currentQuestion: nextQuestion,
             progress: response.progress || progress,
             isLoading: false,
-            isFinished: false
+            isFinished: false,
+            questionHistory: [...(prev.questionHistory || []), prev.currentQuestion]
           };
           StorageService.saveSession(newState);
           return newState;
@@ -208,8 +209,29 @@ export const useSession = () => {
 
   // Go back
   const goBack = useCallback(() => {
-    // Sin preguntas predefinidas, no podemos ir hacia atrás
-    // La funcionalidad de "atrás" se deshabilitará en la UI
+    if (state.step > 1 && state.questionHistory && state.questionHistory.length > 0) {
+      setState(prev => {
+        const previousQuestion = prev.questionHistory![prev.questionHistory!.length - 1];
+        const newHistory = prev.questionHistory!.slice(0, -1);
+        const previousStep = prev.step - 1;
+        
+        // Remove the current question's answer from context
+        const currentQuestionId = `q${prev.step.toString().padStart(2, '0')}`;
+        const { [currentQuestionId]: removed, ...newContext } = prev.context;
+        
+        const newState = {
+          ...prev,
+          step: previousStep,
+          currentQuestion: previousQuestion,
+          questionHistory: newHistory,
+          context: newContext,
+          progress: Math.max((previousStep - 1) * 8, 0),
+          error: null
+        };
+        StorageService.saveSession(newState);
+        return newState;
+      });
+    }
   }, [state]);
 
   // Clear error

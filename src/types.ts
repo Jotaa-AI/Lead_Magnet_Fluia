@@ -22,6 +22,7 @@ export interface SessionState {
   privacyAccepted: boolean;
   isFinished: boolean;
   summary: string | null;
+  questionHistory?: Question[];
 }
 
 export interface WebhookPayload {

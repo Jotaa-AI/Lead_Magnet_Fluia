@@ -247,9 +247,11 @@ export const QuestionScreen: React.FC<QuestionScreenProps> = ({
           <div className="flex items-center justify-between">
             <button
               onClick={onBack}
-              disabled={true}
+              disabled={!canGoBack}
               className={`flex items-center space-x-2 px-6 py-3 rounded-xl font-medium transition-all duration-200 ${
-                'text-gray-600 cursor-not-allowed'
+                canGoBack
+                  ? 'text-gray-300 hover:text-white hover:bg-white/10'
+                  : 'text-gray-600 cursor-not-allowed'
               }`}
             >
               <ArrowLeft className="w-4 h-4" />
