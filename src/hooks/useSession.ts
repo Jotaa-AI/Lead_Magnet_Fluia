@@ -1,10 +1,9 @@
 import { useState, useEffect, useCallback } from 'react';
 import { SessionState, Question, WebhookPayload } from '../types';
-import { baseQuestions } from '../data/questions';
+import { firstQuestion } from '../data/questions';
 import { WebhookService } from '../utils/webhook';
 import { StorageService } from '../utils/storage';
 import { generateSessionId } from '../utils/uuid';
-import { replacePlaceholders } from '../utils/placeholders';
 import { validateRequired, validateEmail, sanitizeInput } from '../utils/validation';
 
 const initialState: SessionState = {
@@ -12,7 +11,7 @@ const initialState: SessionState = {
   step: 0,
   context: {},
   progress: 0,
-  currentQuestion: baseQuestions[0],
+  currentQuestion: firstQuestion,
   isLoading: false,
   error: null,
   hasStarted: false,
@@ -31,10 +30,7 @@ export const useSession = () => {
     const newState = {
       ...initialState,
       sessionId,
-      currentQuestion: {
-        ...baseQuestions[0],
-        text: replacePlaceholders(baseQuestions[0].text, {})
-      }
+      currentQuestion: firstQuestion
     };
     setState(newState);
     StorageService.saveSession(newState);
@@ -57,7 +53,7 @@ export const useSession = () => {
         ...prev,
         hasStarted: true,
         step: 1,
-        progress: Math.round((1 / baseQuestions.length) * 100)
+        progress: 8 // Aproximadamente 8% por pregunta (asumiendo ~12 preguntas)
       };
       StorageService.saveSession(newState);
       return newState;
@@ -132,7 +128,7 @@ export const useSession = () => {
       
       if (response.ok !== false) { // Consider undefined as success
         // Check if session is finished
-        if (response.end || currentStep >= baseQuestions.length) {
+        if (response.end) {
           setState(prev => {
             const newState = {
               ...prev,
@@ -156,7 +152,7 @@ export const useSession = () => {
 
         // Use AI-generated question from webhook - handle both string and object formats
         const nextStep = currentStep + 1;
-        const progress = Math.round((nextStep / baseQuestions.length) * 100);
+        const progress = Math.min(nextStep * 8, 100); // Aproximadamente 8% por pregunta
         
         let nextQuestion: Question;
         if (typeof response.next_question === 'string') {
@@ -185,7 +181,7 @@ export const useSession = () => {
             step: nextStep,
             context: newContext,
             currentQuestion: nextQuestion,
-            progress: Math.max(progress, response.progress || progress),
+            progress: response.progress || progress,
             isLoading: false,
             isFinished: false
           };
@@ -196,68 +192,25 @@ export const useSession = () => {
     } catch (error) {
       console.warn('Webhook error, using fallback:', error);
       
-      // Fallback to local logic
-      let nextStep = currentStep + 1;
-      let nextQuestion: Question;
-      let progress = Math.round((nextStep / baseQuestions.length) * 100);
-      let isFinished = false;
-
-      if (nextStep > baseQuestions.length) {
-        isFinished = true;
-        progress = 100;
-        nextQuestion = currentQuestion;
-      } else {
-        const localQuestion = baseQuestions[nextStep - 1];
-        nextQuestion = {
-          ...localQuestion,
-          text: replacePlaceholders(localQuestion.text, newContext)
-        };
-      }
-
+      // Sin webhook, no podemos continuar
       setState(prev => {
         const newState = {
           ...prev,
-          step: nextStep,
           context: newContext,
-          currentQuestion: nextQuestion,
-          progress,
           isLoading: false,
-          isFinished,
-          error: 'Conexión inestable, seguimos sin perder tu información'
+          error: 'Error de conexión. Por favor, inténtalo de nuevo.'
         };
         StorageService.saveSession(newState);
         return newState;
       });
 
-      // Clear error after 3 seconds
-      setTimeout(() => {
-        setState(prev => ({ ...prev, error: null }));
-      }, 3000);
     }
   }, [state, webhookService]);
 
   // Go back
   const goBack = useCallback(() => {
-    if (state.step > 1) {
-      const prevStep = state.step - 1;
-      const prevQuestion = baseQuestions[prevStep - 1];
-      const questionWithPlaceholders = {
-        ...prevQuestion,
-        text: replacePlaceholders(prevQuestion.text, state.context)
-      };
-
-      setState(prev => {
-        const newState = {
-          ...prev,
-          step: prevStep,
-          currentQuestion: questionWithPlaceholders,
-          progress: Math.round((prevStep / baseQuestions.length) * 100),
-          isFinished: false
-        };
-        StorageService.saveSession(newState);
-        return newState;
-      });
-    }
+    // Sin preguntas predefinidas, no podemos ir hacia atrás
+    // La funcionalidad de "atrás" se deshabilitará en la UI
   }, [state]);
 
   // Clear error
@@ -287,23 +240,4 @@ export const useSession = () => {
     clearError,
     resetSession
   };
-};
-
-// Helper function to get context key from question ID
-const getContextKey = (questionId: string): string => {
-  const keyMap: Record<string, string> = {
-    'q01': 'empresa_actividad',
-    'q02': 'equipo_num',
-    'q03': 'sector',
-    'q04': 'herramientas',
-    'q05': 'procesos_repetitivos',
-    'q06': 'perdidas_principales',
-    'q07': 'canales_captacion',
-    'q08': 'gestion_admin',
-    'q09': 'prioridad_1_semana',
-    'q10': 'vision_robot',
-    'q11': 'email_contacto'
-  };
-  
-  return keyMap[questionId] || questionId;
 };
