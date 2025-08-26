@@ -209,29 +209,38 @@ export const useSession = () => {
 
   // Go back
   const goBack = useCallback(() => {
-    if (state.step > 1 && state.questionHistory && state.questionHistory.length > 0) {
-      setState(prev => {
-        const previousQuestion = prev.questionHistory![prev.questionHistory!.length - 1];
-        const newHistory = prev.questionHistory!.slice(0, -1);
-        const previousStep = prev.step - 1;
-        
-        // Remove the current question's answer from context
-        const currentQuestionId = `q${prev.step.toString().padStart(2, '0')}`;
-        const { [currentQuestionId]: removed, ...newContext } = prev.context;
-        
-        const newState = {
-          ...prev,
-          step: previousStep,
-          currentQuestion: previousQuestion,
-          questionHistory: newHistory,
-          context: newContext,
-          progress: Math.max((previousStep - 1) * 8, 0),
-          error: null
-        };
-        StorageService.saveSession(newState);
-        return newState;
-      });
-    }
+    setState(prev => {
+      if (prev.step <= 1) return prev;
+      
+      const previousStep = prev.step - 1;
+      const currentQuestionId = `q${prev.step.toString().padStart(2, '0')}`;
+      
+      // Remove the current question's answer from context
+      const { [currentQuestionId]: removed, ...newContext } = prev.context;
+      
+      // Get previous question from history or use first question
+      let previousQuestion = firstQuestion;
+      let newHistory = prev.questionHistory || [];
+      
+      if (prev.questionHistory && prev.questionHistory.length > 0) {
+        previousQuestion = prev.questionHistory[prev.questionHistory.length - 1];
+        newHistory = prev.questionHistory.slice(0, -1);
+      }
+      
+      const newState = {
+        ...prev,
+        step: previousStep,
+        currentQuestion: previousQuestion,
+        questionHistory: newHistory,
+        context: newContext,
+        progress: Math.max((previousStep - 1) * 8, 8),
+        error: null,
+        isLoading: false
+      };
+      
+      StorageService.saveSession(newState);
+      return newState;
+    });
   }, [state]);
 
   // Clear error
