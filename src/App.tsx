@@ -1,6 +1,6 @@
 import React from 'react';
 import { useSession } from './hooks/useSession';
-import { PrivacyScreen } from './components/PrivacyScreen';
+import PrivacyScreen from './components/PrivacyScreen';
 import { QuestionScreen } from './components/QuestionScreen';
 import { CompletionScreen } from './components/CompletionScreen';
 
