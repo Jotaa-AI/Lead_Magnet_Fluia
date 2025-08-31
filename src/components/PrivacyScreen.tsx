@@ -23,7 +23,7 @@ export default function PrivacyScreen({ onAccept, onStart }: PrivacyScreenProps)
         <div className="text-center mb-12">
           <div className="flex items-center justify-center mb-6">
             <img 
-              src="/fluialogo.png" 
+              src="/fluialogo_grande copy.png" 
               alt="Fluia Logo" 
               className="h-15 w-auto"
             />
