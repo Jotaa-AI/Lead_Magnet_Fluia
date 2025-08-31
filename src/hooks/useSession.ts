@@ -54,7 +54,7 @@ export const useSession = () => {
         ...prev,
         hasStarted: true,
         step: 1,
-        progress: 8 // Aproximadamente 8% por pregunta (asumiendo ~12 preguntas)
+        progress: 11 // Aproximadamente 11% por pregunta (9 preguntas total)
       };
       StorageService.saveSession(newState);
       return newState;
@@ -158,7 +158,7 @@ export const useSession = () => {
 
         // Use AI-generated question from webhook - handle both string and object formats
         const nextStep = currentStep + 1;
-        const progress = Math.min(nextStep * 8, 100); // Aproximadamente 8% por pregunta
+        const progress = Math.min(nextStep * 11, 100); // Aproximadamente 11% por pregunta (9 total)
         
         let nextQuestion: Question;
         if (typeof response.next_question === 'string') {
@@ -240,7 +240,7 @@ export const useSession = () => {
         currentQuestion: previousQuestion,
         questionHistory: newHistory,
         context: newContext,
-        progress: Math.max((previousStep - 1) * 8, 8),
+        progress: Math.max((previousStep - 1) * 11, 11),
         error: null,
         isLoading: false
       };

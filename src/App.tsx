@@ -45,7 +45,7 @@ function App() {
     <QuestionScreen
       question={state.currentQuestion}
       step={state.step}
-      totalSteps={12}
+      totalSteps={9}
       progress={state.progress}
       isLoading={state.isLoading}
       error={state.error}
