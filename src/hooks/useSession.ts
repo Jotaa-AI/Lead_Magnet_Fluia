@@ -98,6 +98,43 @@ export const useSession = () => {
       [currentQuestionId]: sanitizedAnswer
     };
 
+    // If this is question 9, automatically finish the session
+    if (currentStep === 9) {
+      setState(prev => {
+        const newState = {
+          ...prev,
+          context: newContext,
+          isLoading: false,
+          isFinished: true,
+          progress: 100,
+          summary: null
+        };
+        StorageService.saveSession(newState);
+        return newState;
+      });
+      
+      // Still send to webhook in background for data collection
+      try {
+        const payload: WebhookPayload = {
+          source: 'lead-magnet-fluia',
+          sessionId: state.sessionId,
+          step: currentStep,
+          questionId: currentQuestionId,
+          questionText: state.currentQuestion.text,
+          answer: sanitizedAnswer,
+          context: newContext,
+          timestamp: new Date().toISOString(),
+          userAgent: navigator.userAgent,
+        };
+        webhookService.sendWithRetry(payload).catch(error => {
+          console.warn('Background webhook failed:', error);
+        });
+      } catch (error) {
+        console.warn('Background webhook error:', error);
+      }
+      
+      return;
+    }
     try {
       // Prepare webhook payload
       const payload: WebhookPayload = {
