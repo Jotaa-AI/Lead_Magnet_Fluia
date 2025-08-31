@@ -9,14 +9,10 @@ interface PrivacyScreenProps {
 export default function PrivacyScreen({ onAccept, onStart }: PrivacyScreenProps) {
   const [privacyAccepted, setPrivacyAccepted] = useState(false);
 
-  const handlePrivacyAccept = () => {
-    setPrivacyAccepted(true);
-    onAccept();
-  };
-
-  const handleStart = () => {
+  const handleStartClick = () => {
     if (privacyAccepted) {
-      onStart();
+      onAccept(); // Accept privacy first
+      onStart();  // Then start the session
     }
   };
 
@@ -107,7 +103,7 @@ export default function PrivacyScreen({ onAccept, onStart }: PrivacyScreenProps)
 
           {/* Start Button */}
           <button
-            onClick={privacyAccepted ? handleStart : handlePrivacyAccept}
+            onClick={handleStartClick}
             disabled={!privacyAccepted}
             className={`
               px-8 py-4 rounded-xl font-semibold text-lg transition-all duration-300 flex items-center justify-center mx-auto
