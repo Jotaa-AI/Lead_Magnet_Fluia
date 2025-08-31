@@ -1,7 +1,6 @@
 import { WebhookPayload, WebhookResponse } from '../types';
 
 const WEBHOOK_URL = 'https://personal-n8n.brtnrr.easypanel.host/webhook-test/LeadMagnet';
-const TIMEOUT = 20000; // 20 seconds - increased for AI processing time
 
 export class WebhookService {
   private static instance: WebhookService;
@@ -14,8 +13,6 @@ export class WebhookService {
   }
 
   async sendStep(payload: WebhookPayload): Promise<WebhookResponse> {
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), TIMEOUT);
 
     try {
       console.log('Sending to webhook:', payload);
@@ -26,10 +23,8 @@ export class WebhookService {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(payload),
-        signal: controller.signal
       });
 
-      clearTimeout(timeoutId);
 
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
@@ -39,12 +34,7 @@ export class WebhookService {
       console.log('Webhook response:', data);
       return data;
     } catch (error) {
-      clearTimeout(timeoutId);
-      
       if (error instanceof Error) {
-        if (error.name === 'AbortError') {
-          throw new Error('Timeout: La conexión tardó demasiado');
-        }
         throw new Error(`Error de conexión: ${error.message}`);
       }
       
