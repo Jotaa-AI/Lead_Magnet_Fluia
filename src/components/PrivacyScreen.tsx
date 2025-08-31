@@ -32,7 +32,7 @@ export default function PrivacyScreen({ onAccept, onStart }: PrivacyScreenProps)
             Análisis Gratuito de Automatización
           </h2>
           <p className="text-xl text-gray-300 mb-8">
-            Descubre cómo automatizar tu inmobiliaria y recuperar 15+ horas semanales
+            Descubre cómo automatizar tu negocio y recuperar 15+ horas semanales
           </p>
         </div>
 
@@ -50,7 +50,7 @@ export default function PrivacyScreen({ onAccept, onStart }: PrivacyScreenProps)
           </div>
           <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl p-6 text-center">
             <Users className="w-8 h-8 text-purple-400 mx-auto mb-3" />
-            <h3 className="text-white font-semibold mb-2">200+ agencias</h3>
+            <h3 className="text-white font-semibold mb-2">50+ agencias</h3>
             <p className="text-gray-300 text-sm">Ya confían en nuestro sistema</p>
           </div>
         </div>
@@ -59,7 +59,7 @@ export default function PrivacyScreen({ onAccept, onStart }: PrivacyScreenProps)
         <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl p-8 text-center">
           <div className="mb-8">
             <h3 className="text-2xl font-bold text-white mb-4">
-              ¿Listo para transformar tu inmobiliaria?
+              ¿Listo para transformar tu negocio?
             </h3>
             <p className="text-gray-300 mb-6">
               Nuestro análisis identificará exactamente qué procesos automatizar para maximizar tu ROI
