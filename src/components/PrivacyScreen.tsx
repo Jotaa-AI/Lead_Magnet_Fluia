@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Building2, CheckCircle, Clock, TrendingUp, Users, ArrowRight } from 'lucide-react';
+import { CheckCircle, Clock, TrendingUp, Users, ArrowRight } from 'lucide-react';
 
 interface PrivacyScreenProps {
   onAccept: () => void;
@@ -22,8 +22,11 @@ export default function PrivacyScreen({ onAccept, onStart }: PrivacyScreenProps)
         {/* Header with Logo */}
         <div className="text-center mb-12">
           <div className="flex items-center justify-center mb-6">
-            <Building2 className="w-12 h-12 text-purple-400 mr-3" />
-            <h1 className="text-4xl font-bold text-white">Fluia</h1>
+            <img 
+              src="/fluialogo_grande.png" 
+              alt="Fluia Logo" 
+              className="h-16 w-auto"
+            />
           </div>
           <h2 className="text-3xl font-bold text-white mb-4">
             Análisis Gratuito de Automatización
