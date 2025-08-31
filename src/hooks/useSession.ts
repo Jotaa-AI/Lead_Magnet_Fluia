@@ -125,6 +125,17 @@ export const useSession = () => {
       
       console.log('Processed webhook response:', response);
       
+      // Validate response structure
+      if (!response || (response.ok === false)) {
+        throw new Error('El servidor devolvió una respuesta de error');
+      }
+      
+      // Check if response has required properties
+      if (!response.next_question && !response.end) {
+        console.error('Invalid webhook response format:', response);
+        throw new Error('El servidor no devolvió el formato esperado. Por favor, contacta con soporte.');
+      }
+      
       if (response.ok !== false) { // Consider undefined as success
         // Check if session is finished
         if (response.end) {
@@ -144,10 +155,6 @@ export const useSession = () => {
         }
 
         // Wait for next_question from webhook response
-        if (!response.next_question) {
-          console.error('No next_question in response:', response);
-          throw new Error('No se recibió la siguiente pregunta del servidor. Respuesta: ' + JSON.stringify(response));
-        }
 
         // Use AI-generated question from webhook - handle both string and object formats
         const nextStep = currentStep + 1;
