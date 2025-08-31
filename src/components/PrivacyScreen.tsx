@@ -15,7 +15,9 @@ export default function PrivacyScreen({ onAccept, onStart }: PrivacyScreenProps)
   };
 
   const handleStart = () => {
-    onStart();
+    if (privacyAccepted) {
+      onStart();
+    }
   };
 
   return (

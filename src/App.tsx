@@ -25,6 +25,24 @@ function App() {
     );
   }
 
+  // Show first question after privacy is accepted but before session starts
+  if (state.privacyAccepted && !state.hasStarted) {
+    return (
+      <QuestionScreen
+        question={state.currentQuestion}
+        step={state.step}
+        totalSteps={9}
+        progress={state.progress}
+        isLoading={state.isLoading}
+        error={state.error}
+        canGoBack={false}
+        onSubmit={submitAnswer}
+        onBack={goBack}
+        onClearError={clearError}
+      />
+    );
+  }
+
   // Completion screen
   if (state.isFinished) {
     const companyName = state.context.empresa_actividad || state.context.empresa || '';
