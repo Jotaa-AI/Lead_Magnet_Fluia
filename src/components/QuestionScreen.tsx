@@ -233,8 +233,8 @@ export const QuestionScreen: React.FC<QuestionScreenProps> = ({
         <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-8 shadow-2xl border border-white/20 mb-6">
           {/* Question Text */}
           <div className="mb-8">
-            <h2 className="text-xl md:text-2xl text-white leading-relaxed">
-              {question.text}
+            <h2 className="text-xl md:text-2xl text-white leading-relaxed whitespace-pre-line">
+              {question.text.replace(/\\n/g, '\n')}
             </h2>
           </div>
 
