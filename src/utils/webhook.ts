@@ -1,6 +1,6 @@
 import { WebhookPayload, WebhookResponse } from '../types';
 
-const WEBHOOK_URL = 'https://personal-n8n.brtnrr.easypanel.host/webhook/LeadMagnet';
+const WEBHOOK_URL = 'https://personal-n8n.brtnrr.easypanel.host/webhook-test/LeadMagnet';
 
 export class WebhookService {
   private static instance: WebhookService;
