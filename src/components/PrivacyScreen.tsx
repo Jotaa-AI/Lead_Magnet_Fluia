@@ -159,7 +159,7 @@ export const PrivacyScreen: React.FC<PrivacyScreenProps> = ({ onAccept, onStart 
               <input
                 type="checkbox"
                 checked={accepted}
-                onChange={handleAccept}
+                onChange={(e) => setAccepted(e.target.checked)}
                 className="w-6 h-6 mt-1 rounded-lg border-2 border-purple-400 bg-transparent checked:bg-purple-500 checked:border-purple-500 focus:ring-2 focus:ring-purple-400 focus:ring-offset-0 transition-all duration-200"
               />
               <span className="text-gray-300 group-hover:text-white transition-colors leading-relaxed">
@@ -182,6 +182,43 @@ export const PrivacyScreen: React.FC<PrivacyScreenProps> = ({ onAccept, onStart 
             🚀 Empezar análisis gratuito
             <ArrowRight className="w-6 h-6 ml-3" />
           </button>
+
+          {/* Additional info */}
+          <div className="text-center mt-6">
+            <p className="text-gray-400 text-sm">
+              ⏱️ El análisis tarda aproximadamente 5 minutos • 📊 Recibirás tu informe por email en menos de 10 minutos
+            </p>
+          </div>
+        </div>
+
+        {/* Bottom trust indicators */}
+        <div className="text-center mt-12">
+          <div className="flex flex-wrap items-center justify-center gap-8 text-gray-400 text-sm">
+            <div className="flex items-center space-x-2">
+              <Users className="w-4 h-4" />
+              <span>+200 empresas confían en nosotros</span>
+            </div>
+            <div className="flex items-center space-x-2">
+              <Shield className="w-4 h-4" />
+              <span>Datos 100% seguros</span>
+            </div>
+            <div className="flex items-center space-x-2">
+              <Clock className="w-4 h-4" />
+              <span>Respuesta inmediata</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const handleStart = () => {
+  if (accepted) {
+    onAccept(); // Acepta la privacidad
+    onStart(); // Inicia el análisis
+  }
+};
 
           {/* Additional info */}
           <div className="text-center mt-6">

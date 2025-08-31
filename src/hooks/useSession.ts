@@ -158,7 +158,7 @@ export const useSession = () => {
 
         // Use AI-generated question from webhook - handle both string and object formats
         const nextStep = currentStep + 1;
-        const progress = Math.min(nextStep * 11, 100); // Aproximadamente 11% por pregunta (9 total)
+        const progress = Math.min(nextStep * 11, 99); // Aproximadamente 11% por pregunta (9 total)
         
         let nextQuestion: Question;
         if (typeof response.next_question === 'string') {
