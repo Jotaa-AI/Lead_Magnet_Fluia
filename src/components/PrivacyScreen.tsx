@@ -25,7 +25,7 @@ export default function PrivacyScreen({ onAccept, onStart }: PrivacyScreenProps)
             <img 
               src="/fluialogo_grande.png" 
               alt="Fluia Logo" 
-              className="h-40 w-40"
+              className="h-80 w-auto"
             />
           </div>
           <h2 className="text-3xl font-bold text-white mb-4">
