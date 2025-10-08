@@ -20,7 +20,8 @@ export default function PrivacyScreen({ onAccept, onStart }: PrivacyScreenProps)
             />
           </div>
           <h1 className="text-3xl md:text-4xl font-bold text-white mb-4">
-            Escáner con IA para RR.HH: en 5 minutos detectamos cuellos de botella para el sector de RR.HH. y te enviamos un informe gratis
+            Escáner con IA para RR.HH: 
+            en 5 minutos detectamos cuellos de botella para el sector de RR.HH. y te enviamos un informe gratis
           </h1>
           <p className="text-xl text-gray-300 mb-8">
             Responde como si charláramos. Te iremos guiando paso a paso.
