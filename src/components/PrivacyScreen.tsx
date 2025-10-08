@@ -7,15 +7,6 @@ interface PrivacyScreenProps {
 }
 
 export default function PrivacyScreen({ onAccept, onStart }: PrivacyScreenProps) {
-  const [privacyAccepted, setPrivacyAccepted] = useState(false);
-
-  const handleStartClick = () => {
-    if (privacyAccepted) {
-      onAccept(); // Accept privacy first
-      onStart();  // Then start the session
-    }
-  };
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-black via-gray-900 to-purple-900 flex items-center justify-center p-4">
       <div className="max-w-4xl w-full">
@@ -23,16 +14,26 @@ export default function PrivacyScreen({ onAccept, onStart }: PrivacyScreenProps)
         <div className="text-center mb-12">
           <div className="flex items-center justify-center mb-6">
             <img 
-              src="/fluialogo_grande copy.png" 
+              src="/fluialogo copy.png" 
               alt="Fluia Logo" 
-              className="h-40 w-40"
+              className="h-32 w-32"
             />
           </div>
-          <h2 className="text-3xl font-bold text-white mb-4">
-            Análisis Gratuito de Automatización
-          </h2>
+          <h1 className="text-3xl md:text-4xl font-bold text-white mb-4">
+            Escáner de Automatización: en 5 minutos detectamos atascos y te enviamos un informe gratis
+          </h1>
           <p className="text-xl text-gray-300 mb-8">
-            Descubre cómo automatizar tu negocio y recuperar 15+ horas semanales
+            Responde como si charláramos. Te iremos guiando paso a paso.
+          </p>
+        </div>
+
+        {/* Trust Building Section */}
+        <div className="text-center mb-8">
+          <p className="text-lg text-purple-200 mb-4">
+            ✨ <strong>Más de 200 empresas</strong> ya han optimizado sus procesos con nuestro análisis
+          </p>
+          <p className="text-gray-300">
+            🎯 Identificamos exactamente dónde estás perdiendo tiempo y dinero
           </p>
         </div>
 
@@ -45,13 +46,13 @@ export default function PrivacyScreen({ onAccept, onStart }: PrivacyScreenProps)
           </div>
           <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl p-6 text-center">
             <TrendingUp className="w-8 h-8 text-purple-400 mx-auto mb-3" />
-            <h3 className="text-white font-semibold mb-2">+40% ventas</h3>
-            <p className="text-gray-300 text-sm">Incremento promedio reportado</p>
+            <h3 className="text-white font-semibold mb-2">15+ horas</h3>
+            <p className="text-gray-300 text-sm">Recuperadas semanalmente</p>
           </div>
           <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl p-6 text-center">
             <Users className="w-8 h-8 text-purple-400 mx-auto mb-3" />
-            <h3 className="text-white font-semibold mb-2">50+ agencias</h3>
-            <p className="text-gray-300 text-sm">Ya confían en nuestro sistema</p>
+            <h3 className="text-white font-semibold mb-2">100% gratis</h3>
+            <p className="text-gray-300 text-sm">Sin compromiso ni letra pequeña</p>
           </div>
         </div>
 
@@ -59,75 +60,50 @@ export default function PrivacyScreen({ onAccept, onStart }: PrivacyScreenProps)
         <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl p-8 text-center">
           <div className="mb-8">
             <h3 className="text-2xl font-bold text-white mb-4">
-              ¿Listo para transformar tu negocio?
+              ¿Preparado para descubrir tu potencial de automatización?
             </h3>
             <p className="text-gray-300 mb-6">
-              Nuestro análisis identificará exactamente qué procesos automatizar para maximizar tu ROI
+              Te haremos unas preguntas estratégicas para crear tu hoja de ruta personalizada
             </p>
             
             {/* What we'll analyze */}
             <div className="bg-black/20 rounded-xl p-6 mb-8">
-              <h4 className="text-white font-semibold mb-4">Analizaremos:</h4>
+              <h4 className="text-white font-semibold mb-4">📋 Analizaremos:</h4>
               <div className="grid md:grid-cols-2 gap-3 text-left">
                 <div className="flex items-center text-gray-300">
                   <CheckCircle className="w-4 h-4 text-purple-400 mr-2 flex-shrink-0" />
-                  <span className="text-sm">Gestión de leads y seguimiento</span>
+                  <span className="text-sm">Procesos que más tiempo consumen</span>
                 </div>
                 <div className="flex items-center text-gray-300">
                   <CheckCircle className="w-4 h-4 text-purple-400 mr-2 flex-shrink-0" />
-                  <span className="text-sm">Comunicación con clientes</span>
+                  <span className="text-sm">Herramientas que ya usas</span>
                 </div>
                 <div className="flex items-center text-gray-300">
                   <CheckCircle className="w-4 h-4 text-purple-400 mr-2 flex-shrink-0" />
-                  <span className="text-sm">Procesos administrativos</span>
+                  <span className="text-sm">Canales de captación actuales</span>
                 </div>
                 <div className="flex items-center text-gray-300">
                   <CheckCircle className="w-4 h-4 text-purple-400 mr-2 flex-shrink-0" />
-                  <span className="text-sm">Marketing y captación</span>
+                  <span className="text-sm">Oportunidades de mejora inmediata</span>
                 </div>
               </div>
             </div>
           </div>
 
-          {/* Privacy Acceptance */}
-          <div className="mb-8">
-            <label className="flex items-start justify-center text-left cursor-pointer group">
-              <input
-                type="checkbox"
-                checked={privacyAccepted}
-                onChange={(e) => setPrivacyAccepted(e.target.checked)}
-                className="mt-1 mr-3 w-4 h-4 text-purple-600 bg-transparent border-2 border-purple-400 rounded focus:ring-purple-500 focus:ring-2"
-              />
-              <span className="text-sm text-gray-300 max-w-md">
-                Acepto el procesamiento de mis datos para recibir el análisis personalizado y comunicaciones relevantes sobre automatización empresarial
-              </span>
-            </label>
-          </div>
-
           {/* Start Button */}
           <button
-            onClick={handleStartClick}
-            disabled={!privacyAccepted}
-            className={`
-              px-8 py-4 rounded-xl font-semibold text-lg transition-all duration-300 flex items-center justify-center mx-auto
-              ${privacyAccepted 
-                ? 'bg-purple-600 hover:bg-purple-700 text-white shadow-lg hover:shadow-purple-500/25 transform hover:scale-105' 
-                : 'bg-gray-600 text-gray-400 cursor-not-allowed'
-              }
-            `}
+            onClick={() => {
+              onAccept();
+              onStart();
+            }}
+            className="px-8 py-4 rounded-xl font-semibold text-lg transition-all duration-300 flex items-center justify-center mx-auto bg-purple-600 hover:bg-purple-700 text-white shadow-lg hover:shadow-purple-500/25 transform hover:scale-105"
           >
-            {privacyAccepted ? (
-              <>
-                Comenzar análisis gratuito
-                <ArrowRight className="w-5 h-5 ml-2" />
-              </>
-            ) : (
-              'Acepta la política para continuar'
-            )}
+            Empezar análisis
+            <ArrowRight className="w-5 h-5 ml-2" />
           </button>
 
           <p className="text-xs text-gray-400 mt-4">
-            100% gratuito • Sin compromiso • Resultados inmediatos
+            🔒 Tus datos están seguros • 100% gratuito • Sin spam
           </p>
         </div>
       </div>
