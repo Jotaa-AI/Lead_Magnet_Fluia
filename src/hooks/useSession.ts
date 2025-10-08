@@ -125,6 +125,7 @@ export const useSession = () => {
           context: newContext,
           timestamp: new Date().toISOString(),
           userAgent: navigator.userAgent,
+          action: 'finish'
         };
         webhookService.sendWithRetry(payload).catch(error => {
           console.warn('Background webhook failed:', error);
