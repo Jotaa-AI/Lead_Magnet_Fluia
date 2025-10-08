@@ -30,7 +30,7 @@ export default function PrivacyScreen({ onAccept, onStart }: PrivacyScreenProps)
         {/* Trust Building Section */}
         <div className="text-center mb-8">
           <p className="text-lg text-purple-200 mb-4">
-            ✨ <strong>Más de 200 empresas</strong> ya han optimizado sus procesos con nuestro análisis
+            ✨ <strong>Más de 50 empresas</strong> ya han optimizado sus procesos con nuestro análisis
           </p>
           <p className="text-gray-300">
             🎯 Identificamos exactamente dónde estás perdiendo tiempo y dinero
